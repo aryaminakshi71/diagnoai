@@ -1,5 +1,5 @@
 {
-  "name": "@diagnolis/web",
+  "name": "@diagnoai/web",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
     "@orpc/client": "^1.16.2",
     "@orpc/server": "^1.16.2",
     "@orpc/tanstack-query": "^1.16.2",
-    "@diagnolis/core": "workspace:*",
+    "@diagnoai/core": "workspace:*",
     "@tanstack/react-query": "^5.17.0",
     "@tanstack/react-router": "^1.0.0",
     "@tanstack/start": "^1.0.0",

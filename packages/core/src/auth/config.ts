@@ -7,8 +7,8 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { organization } from 'better-auth/plugins/organization'
-import { db } from '@diagnolis/storage/db'
-import { schema } from '@diagnolis/storage/db'
+import { db } from '@diagnoai/storage/db'
+import { schema } from '@diagnoai/storage/db'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {

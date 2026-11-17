@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { eq, and } from 'drizzle-orm'
 import { orgAuthed, getDb, schema } from '../procedures'
 import { ORPCError } from '@orpc/server'
-import { uploadToR2, deleteFromR2 } from '@diagnolis/storage/r2'
+import { uploadToR2, deleteFromR2 } from '@diagnoai/storage/r2'
 
 export const filesRouter = {
   /**

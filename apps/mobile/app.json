@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "DiagnoLIS",
-    "slug": "diagnolis",
+    "name": "DiagnoAI",
+    "slug": "diagnoai",
     "version": "1.0.0",
     "scheme": "labregisters",
     "orientation": "portrait",

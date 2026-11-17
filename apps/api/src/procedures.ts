@@ -8,8 +8,8 @@
  */
 
 import { os } from "@orpc/server"
-import { db, schema } from "@diagnolis/storage/db"
-import type { Database } from "@diagnolis/storage/db"
+import { db, schema } from "@diagnoai/storage/db"
+import type { Database } from "@diagnoai/storage/db"
 
 export interface Logger {
   info: (...args: any[]) => void

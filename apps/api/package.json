@@ -1,5 +1,5 @@
 {
-  "name": "@diagnolis/api",
+  "name": "@diagnoai/api",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -12,8 +12,8 @@
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {
-    "@diagnolis/core": "workspace:*",
-    "@diagnolis/storage": "workspace:*",
+    "@diagnoai/core": "workspace:*",
+    "@diagnoai/storage": "workspace:*",
     "@orpc/server": "^1.16.2",
     "better-auth": "^1.0.0",
     "dotenv": "^16.4.7",

@@ -1,5 +1,5 @@
 {
-  "name": "@diagnolis/core",
+  "name": "@diagnoai/core",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -20,7 +20,7 @@
     "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
-    "@diagnolis/storage": "workspace:*",
+    "@diagnoai/storage": "workspace:*",
     "better-auth": "^1.0.0",
     "zod": "^3.22.4",
     "xlsx": "^0.18.5"

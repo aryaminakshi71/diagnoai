@@ -12,10 +12,10 @@ import {
   updateTicketSchema,
   ticketFilterSchema,
   addCommentSchema,
-} from '@diagnolis/core/validators/ticket'
+} from '@diagnoai/core/validators/ticket'
 import { ORPCError } from '@orpc/server'
-import { getEmailService, TicketEmailTemplates } from '@diagnolis/core/services/email'
-import { calculateSLADueDates, getDefaultSLATargets } from '@diagnolis/core/services/sla'
+import { getEmailService, TicketEmailTemplates } from '@diagnoai/core/services/email'
+import { calculateSLADueDates, getDefaultSLATargets } from '@diagnoai/core/services/sla'
 
 // Generate ticket number helper
 function generateTicketNumber(organizationId: string, count: number): string {

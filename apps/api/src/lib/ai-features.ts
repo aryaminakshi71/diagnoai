@@ -1,5 +1,5 @@
 /**
- * DiagnoLIS AI Features
+ * DiagnoAI AI Features
  *
  * AI-powered lab features:
  * - Result interpretation

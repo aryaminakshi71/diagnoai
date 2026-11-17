@@ -8,7 +8,7 @@
 import { z } from 'zod'
 import { count, eq } from 'drizzle-orm'
 import { ORPCError } from '@orpc/server'
-import { db, schema } from '@diagnolis/storage/db'
+import { db, schema } from '@diagnoai/storage/db'
 import { pub } from '../procedures'
 
 const PLAN_PRICES: Record<string, number> = {

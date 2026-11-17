@@ -15,7 +15,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>DiagnoLIS</Text>
+      <Text style={styles.title}>DiagnoAI</Text>
       <Text style={styles.subtitle}>Veterinary diagnostic registers</Text>
       <TextInput
         style={styles.input}

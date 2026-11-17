@@ -11,7 +11,7 @@ import {
   createArticleSchema,
   updateArticleSchema,
   articleFilterSchema,
-} from '@diagnolis/core/validators/kb'
+} from '@diagnoai/core/validators/kb'
 import { ORPCError } from '@orpc/server'
 
 export const kbRouter = {

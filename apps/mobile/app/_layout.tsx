@@ -9,7 +9,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <StatusBar style="auto" />
       <Stack>
-        <Stack.Screen name="index" options={{ title: "DiagnoLIS" }} />
+        <Stack.Screen name="index" options={{ title: "DiagnoAI" }} />
         <Stack.Screen name="registers" options={{ title: "Registers" }} />
         <Stack.Screen name="register/[type]" options={{ title: "Register" }} />
       </Stack>

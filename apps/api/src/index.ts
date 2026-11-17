@@ -92,5 +92,5 @@ const server = createServer(async (req, res) => {
 })
 
 server.listen(port, () => {
-  console.log(`DiagnoLIS API listening on http://localhost:${port}`)
+  console.log(`DiagnoAI API listening on http://localhost:${port}`)
 })
