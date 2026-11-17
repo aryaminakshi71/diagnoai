@@ -20,7 +20,7 @@ export const psksStockRegisterRouter = {
       summary: 'List PSKS stock registers',
       tags: ['Registers'],
     })
-    .input(psksStockRegisterFilterSchema.optional())
+    .input(psksStockRegisterFilterSchema.default({}))
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)

@@ -22,7 +22,7 @@ export const dailyExpenditureRegisterRouter = {
       summary: 'List daily expenditure registers',
       tags: ['Registers'],
     })
-    .input(dailyExpenditureRegisterFilterSchema.optional())
+    .input(dailyExpenditureRegisterFilterSchema.default({}))
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)

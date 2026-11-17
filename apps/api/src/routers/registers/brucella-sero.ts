@@ -20,7 +20,7 @@ export const brucellaSeroRegisterRouter = {
       summary: 'List Brucella sero surveillance registers',
       tags: ['Registers'],
     })
-    .input(brucellaSeroRegisterFilterSchema.optional())
+    .input(brucellaSeroRegisterFilterSchema.default({}))
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)

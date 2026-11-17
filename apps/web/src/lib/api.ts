@@ -14,11 +14,11 @@ import { QueryClient } from '@tanstack/react-query'
 import type { AppRouter } from '../../../../apps/api/src/routers'
 
 // API base URL
+const RAW_API_URL = import.meta.env.VITE_PUBLIC_API_URL ?? '/api/rpc'
 const API_BASE_URL =
-  import.meta.env.VITE_PUBLIC_API_URL ??
-  (typeof window !== 'undefined'
-    ? `${window.location.origin}/api/rpc`
-    : 'http://localhost:3101/api/rpc')
+  typeof window !== 'undefined'
+    ? new URL(RAW_API_URL, window.location.origin).toString()
+    : 'http://localhost:3101/api/rpc'
 
 const link = new RPCLink({
   url: API_BASE_URL,
