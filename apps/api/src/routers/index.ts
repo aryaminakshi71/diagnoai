@@ -20,6 +20,7 @@ import { dataTransferRouter } from './data-transfer'
 import { autoPopulateRouter } from './auto-populate'
 import { reportsRouter } from './reports'
 import { whatsappRouter } from './whatsapp'
+import { aiRouter } from './ai'
 
 export const appRouter = {
   health: healthRouter,
@@ -36,6 +37,7 @@ export const appRouter = {
   autoPopulate: autoPopulateRouter,
   reports: reportsRouter,
   whatsapp: whatsappRouter,
+  ai: aiRouter,
   // Add more routers here as needed:
   // org: orgRouter,
   // asset: assetRouter,
