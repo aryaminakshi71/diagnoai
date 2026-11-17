@@ -9,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 // Entry Register Hooks
 export function useEntryRegisters(
-  input?: Parameters<typeof orpc.registers.entry.list.queryOptions>[0]['input'],
+  input?: any,
 ) {
   return useQuery(orpc.registers.entry.list.queryOptions({ input: input ?? {} }))
 }
@@ -50,7 +50,7 @@ export function useDeleteEntryRegister() {
 
 // OPD Register Hooks
 export function useOpdRegisters(
-  input?: Parameters<typeof orpc.registers.opd.list.queryOptions>[0]['input'],
+  input?: any,
 ) {
   return useQuery(orpc.registers.opd.list.queryOptions({ input: input ?? {} }))
 }

@@ -23,6 +23,7 @@ import { reportsRouter } from './reports'
 import { whatsappRouter } from './whatsapp'
 import { aiRouter } from './ai'
 import { metricsRouter } from './metrics'
+import { lisRouter } from './lis'
 
 export const appRouter = {
   branding: brandingRouter,
@@ -42,6 +43,7 @@ export const appRouter = {
   whatsapp: whatsappRouter,
   ai: aiRouter,
   metrics: metricsRouter,
+  lis: lisRouter,
   // Add more routers here as needed:
   // org: orgRouter,
   // asset: assetRouter,

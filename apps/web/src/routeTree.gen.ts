@@ -15,6 +15,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
+import { Route as AppLisIndexRouteImport } from './routes/app/lis/index'
 import { Route as AppRegistersIndexRouteImport } from './routes/app/registers/index'
 import { Route as AppRegistersTypeIndexRouteImport } from './routes/app/registers/$type/index'
 
@@ -48,6 +49,11 @@ const AuthSignupRoute = AuthSignupRouteImport.update({
   path: '/auth/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppLisIndexRoute = AppLisIndexRouteImport.update({
+  id: '/app/lis/',
+  path: '/app/lis/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRegistersIndexRoute = AppRegistersIndexRouteImport.update({
   id: '/app/registers/',
   path: '/app/registers/',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/app/dashboard': typeof AppDashboardRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/app/lis/': typeof AppLisIndexRoute
   '/app/registers/': typeof AppRegistersIndexRoute
   '/app/registers/$type/': typeof AppRegistersTypeIndexRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/app/dashboard': typeof AppDashboardRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/app/lis': typeof AppLisIndexRoute
   '/app/registers': typeof AppRegistersIndexRoute
   '/app/registers/$type': typeof AppRegistersTypeIndexRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/app/dashboard': typeof AppDashboardRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/app/lis/': typeof AppLisIndexRoute
   '/app/registers/': typeof AppRegistersIndexRoute
   '/app/registers/$type/': typeof AppRegistersTypeIndexRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/app/dashboard'
     | '/auth/login'
     | '/auth/signup'
+    | '/app/lis/'
     | '/app/registers/'
     | '/app/registers/$type/'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/app/dashboard'
     | '/auth/login'
     | '/auth/signup'
+    | '/app/lis'
     | '/app/registers'
     | '/app/registers/$type'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/app/dashboard'
     | '/auth/login'
     | '/auth/signup'
+    | '/app/lis/'
     | '/app/registers/'
     | '/app/registers/$type/'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
+  AppLisIndexRoute: typeof AppLisIndexRoute
   AppRegistersIndexRoute: typeof AppRegistersIndexRoute
   AppRegistersTypeIndexRoute: typeof AppRegistersTypeIndexRoute
 }
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/lis/': {
+      id: '/app/lis/'
+      path: '/app/lis'
+      fullPath: '/app/lis/'
+      preLoaderRoute: typeof AppLisIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/registers/': {
       id: '/app/registers/'
       path: '/app/registers'
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignupRoute: AuthSignupRoute,
+  AppLisIndexRoute: AppLisIndexRoute,
   AppRegistersIndexRoute: AppRegistersIndexRoute,
   AppRegistersTypeIndexRoute: AppRegistersTypeIndexRoute,
 }

@@ -64,6 +64,26 @@ function RegistersPage() {
         </p>
       </div>
 
+      <a
+        href="/app/lis"
+        className="mb-8 block rounded-xl border border-blue-200 bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white shadow-sm hover:shadow-md transition-shadow"
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold">Laboratory Workspace</h2>
+            <p className="mt-1 text-blue-100">
+              Patients, orders, samples, results, reports, billing, inventory &amp; QC
+            </p>
+          </div>
+          <span className="rounded-full bg-white/20 px-4 py-2 text-sm font-medium">
+            Open LIS →
+          </span>
+        </div>
+      </a>
+
+      <h2 className="mb-4 text-lg font-semibold text-gray-700">
+        Legacy Registers
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {registers.map((register) => (
           <a

@@ -6,7 +6,6 @@
 
 import { createORPCClient } from '@orpc/client'
 import { RPCLink } from '@orpc/client/fetch'
-import { BatchLinkPlugin } from '@orpc/client/plugins'
 import { createTanstackQueryUtils } from '@orpc/tanstack-query'
 import type { RouterClient } from '@orpc/server'
 import { QueryClient } from '@tanstack/react-query'
@@ -22,17 +21,6 @@ const API_BASE_URL =
 
 const link = new RPCLink({
   url: API_BASE_URL,
-  plugins: [
-    new BatchLinkPlugin({
-      exclude: ({ path }) => path[0] === 'sse',
-      groups: [
-        {
-          condition: () => true,
-          context: {},
-        },
-      ],
-    }),
-  ],
 })
 
 export const orpcClient: RouterClient<AppRouter> = createORPCClient(link)

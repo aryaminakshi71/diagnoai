@@ -9,6 +9,7 @@ loadEnv({ path: path.resolve(__dirname, '../../../.env') })
 const { RPCHandler } = await import('@orpc/server/node')
 const { appRouter } = await import('./routers')
 const { handleAuthRequest } = await import('./auth/handler')
+const { auth } = await import('@diagnoai/core/auth/config')
 
 const rpcHandler = new RPCHandler(appRouter)
 
@@ -82,13 +83,24 @@ const server = createServer(async (req, res) => {
       { method: req.method ?? "GET", headers: headerEntries },
     )
 
+    let session: Awaited<ReturnType<typeof auth.api.getSession>> | null = null
+    try {
+      session = await auth.api.getSession({
+        headers: new Headers(headerEntries),
+      })
+    } catch {
+      session = null
+    }
+
     const result = await rpcHandler.handle(req, res, {
       prefix: '/api/rpc',
       context: {
         logger: console,
         env: process.env,
         request: rpcRequest,
-      },
+        user: session?.user,
+        session: session?.session,
+      } as any,
     })
     if (!result.matched) {
       res.statusCode = 404
