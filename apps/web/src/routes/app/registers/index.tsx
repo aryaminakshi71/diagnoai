@@ -39,6 +39,9 @@ const REGISTER_TYPES: RegisterDef[] = [
 const LAB_TYPE = (import.meta.env.VITE_LAB_TYPE as 'human' | 'veterinary' | 'both' | undefined) ?? 'both'
 
 function visibleRegisters(): RegisterDef[] {
+  // Human labs use the industry-standard LIS workspace, not the legacy
+  // government registers. Veterinary labs keep the legacy registers.
+  if (LAB_TYPE === 'human') return []
   if (LAB_TYPE === 'both') return REGISTER_TYPES
   return REGISTER_TYPES.filter((r) => r.type === 'both' || r.type === LAB_TYPE)
 }
@@ -81,23 +84,27 @@ function RegistersPage() {
         </div>
       </a>
 
-      <h2 className="mb-4 text-lg font-semibold text-gray-700">
-        Legacy Registers
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {registers.map((register) => (
-          <a
-            key={register.id}
-            href={`/app/registers/${register.id}`}
-            className="block p-6 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
-          >
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              {register.name}
-            </h2>
-            <p className="text-gray-600 text-sm">{register.description}</p>
-          </a>
-        ))}
-      </div>
+      {registers.length > 0 && (
+        <>
+          <h2 className="mb-4 text-lg font-semibold text-gray-700">
+            Legacy Registers
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {registers.map((register) => (
+              <a
+                key={register.id}
+                href={`/app/registers/${register.id}`}
+                className="block p-6 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
+              >
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  {register.name}
+                </h2>
+                <p className="text-gray-600 text-sm">{register.description}</p>
+              </a>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
