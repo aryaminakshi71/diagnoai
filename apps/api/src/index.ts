@@ -10,7 +10,7 @@ const { RPCHandler } = await import('@orpc/server/node')
 const { appRouter } = await import('./routers')
 const { handleAuthRequest } = await import('./auth/handler')
 
-const rpcHandler = new RPCHandler(appRouter, { prefix: '/api/rpc' })
+const rpcHandler = new RPCHandler(appRouter)
 
 const port = Number(process.env.PORT ?? 3101)
 
