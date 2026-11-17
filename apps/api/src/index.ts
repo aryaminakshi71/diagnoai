@@ -10,7 +10,7 @@ const { RPCHandler } = await import('@orpc/server/node')
 const { appRouter } = await import('./routers')
 const { handleAuthRequest } = await import('./auth/handler')
 
-const rpcHandler = new RPCHandler(appRouter)
+const rpcHandler = new RPCHandler(appRouter, { prefix: '/api/rpc' })
 
 const port = Number(process.env.PORT ?? 3101)
 
@@ -72,10 +72,21 @@ const server = createServer(async (req, res) => {
       return
     }
 
+    const headerEntries: Array<[string, string]> = []
+    for (const [k, v] of Object.entries(req.headers)) {
+      if (typeof v === "string") headerEntries.push([k, v])
+      else if (Array.isArray(v)) headerEntries.push([k, v.join(",")])
+    }
+    const rpcRequest = new Request(
+      `http://localhost:${port}${req.url ?? "/"}`,
+      { method: req.method ?? "GET", headers: headerEntries },
+    )
+
     const result = await rpcHandler.handle(req, res, {
       context: {
         logger: console,
         env: process.env,
+        request: rpcRequest,
       },
     })
     if (!result.matched) {

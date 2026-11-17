@@ -51,7 +51,7 @@ export const metricsRouter = {
       )
 
       return {
-        app: 'diagnolis',
+        app: 'diagnoai',
         version: '1.0.0',
         status: 'ok',
         uptimeSeconds: Math.round(process.uptime()),
