@@ -18,6 +18,8 @@ import { registersRouter } from './registers'
 import { crossRegisterRouter } from './cross-register'
 import { dataTransferRouter } from './data-transfer'
 import { autoPopulateRouter } from './auto-populate'
+import { reportsRouter } from './reports'
+import { whatsappRouter } from './whatsapp'
 
 export const appRouter = {
   health: healthRouter,
@@ -32,6 +34,8 @@ export const appRouter = {
   crossRegister: crossRegisterRouter,
   dataTransfer: dataTransferRouter,
   autoPopulate: autoPopulateRouter,
+  reports: reportsRouter,
+  whatsapp: whatsappRouter,
   // Add more routers here as needed:
   // org: orgRouter,
   // asset: assetRouter,
