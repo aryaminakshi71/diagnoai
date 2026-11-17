@@ -26,7 +26,7 @@ export const entryRegisterRouter = {
       summary: 'List entry registers',
       tags: ['Registers'],
     })
-    .input(entryRegisterFilterSchema)
+    .input(entryRegisterFilterSchema.optional())
     .output(
       z.object({
         registers: z.array(z.any()),

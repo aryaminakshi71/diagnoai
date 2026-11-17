@@ -20,7 +20,7 @@ export const psksLedgerRegisterRouter = {
       summary: 'List PSKS ledger registers',
       tags: ['Registers'],
     })
-    .input(psksLedgerRegisterFilterSchema)
+    .input(psksLedgerRegisterFilterSchema.optional())
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)

@@ -20,7 +20,7 @@ export const ledgerRegisterRouter = {
       summary: 'List ledger registers',
       tags: ['Registers'],
     })
-    .input(ledgerRegisterFilterSchema)
+    .input(ledgerRegisterFilterSchema.optional())
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)

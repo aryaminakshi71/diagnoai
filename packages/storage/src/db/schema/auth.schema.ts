@@ -46,6 +46,8 @@ export const organizations = pgTable(
     name: varchar('name', { length: 255 }).notNull(),
     slug: varchar('slug', { length: 255 }).notNull().unique(),
     plan: varchar('plan', { length: 50 }).default('free').notNull(),
+    logo: text('logo'),
+    metadata: text('metadata'),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -98,6 +100,7 @@ export const sessions = pgTable(
     token: varchar('token', { length: 500 }).notNull().unique(),
     ipAddress: varchar('ip_address', { length: 100 }),
     userAgent: text('user_agent'),
+    activeOrganizationId: uuid('active_organization_id'),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -158,6 +161,8 @@ export const accounts = pgTable(
     providerId: varchar('provider_id', { length: 100 }).notNull(),
     accessToken: text('access_token'),
     refreshToken: text('refresh_token'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at', { withTimezone: true }),
+    refreshTokenExpiresAt: timestamp('refresh_token_expires_at', { withTimezone: true }),
     expiresAt: timestamp('expires_at', { withTimezone: true }),
     idToken: text('id_token'),
     scope: text('scope'),
@@ -189,9 +194,35 @@ export const verifications = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
   (table) => ({
     identifierIdx: index('idx_verifications_identifier').on(table.identifier),
+  }),
+)
+
+// Invitations table (Better Auth organization plugin)
+export const invitations = pgTable(
+  'invitations',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    organizationId: uuid('organization_id')
+      .notNull()
+      .references(() => organizations.id, { onDelete: 'cascade' }),
+    email: varchar('email', { length: 255 }).notNull(),
+    role: varchar('role', { length: 50 }),
+    status: varchar('status', { length: 20 }).default('pending'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
+    inviterId: uuid('inviter_id').references(() => users.id, { onDelete: 'set null' }),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    orgIdx: index('idx_invitations_org').on(table.organizationId),
+    emailIdx: index('idx_invitations_email').on(table.email),
   }),
 )
 

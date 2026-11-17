@@ -21,7 +21,7 @@ export const brucellaRbptRegisterRouter = {
       summary: 'List Brucella RBPT registers',
       tags: ['Registers'],
     })
-    .input(brucellaRbptRegisterFilterSchema)
+    .input(brucellaRbptRegisterFilterSchema.optional())
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)

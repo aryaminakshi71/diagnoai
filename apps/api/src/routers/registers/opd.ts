@@ -20,7 +20,7 @@ export const opdRegisterRouter = {
       summary: 'List OPD registers',
       tags: ['Registers'],
     })
-    .input(opdRegisterFilterSchema)
+    .input(opdRegisterFilterSchema.optional())
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)

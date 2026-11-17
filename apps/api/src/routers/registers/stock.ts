@@ -20,7 +20,7 @@ export const stockRegisterRouter = {
       summary: 'List stock registers',
       tags: ['Registers'],
     })
-    .input(stockRegisterFilterSchema)
+    .input(stockRegisterFilterSchema.optional())
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)

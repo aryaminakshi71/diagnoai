@@ -20,7 +20,7 @@ export const fmdRegisterRouter = {
       summary: 'List FMD registers',
       tags: ['Registers'],
     })
-    .input(fmdRegisterFilterSchema)
+    .input(fmdRegisterFilterSchema.optional())
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)

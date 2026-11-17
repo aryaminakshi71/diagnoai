@@ -83,6 +83,7 @@ const server = createServer(async (req, res) => {
     )
 
     const result = await rpcHandler.handle(req, res, {
+      prefix: '/api/rpc',
       context: {
         logger: console,
         env: process.env,

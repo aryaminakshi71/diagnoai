@@ -16,7 +16,9 @@ import type { AppRouter } from '../../../../apps/api/src/routers'
 // API base URL
 const API_BASE_URL =
   import.meta.env.VITE_PUBLIC_API_URL ??
-  (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3101')
+  (typeof window !== 'undefined'
+    ? `${window.location.origin}/api/rpc`
+    : 'http://localhost:3101/api/rpc')
 
 const link = new RPCLink({
   url: API_BASE_URL,

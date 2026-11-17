@@ -15,6 +15,20 @@
       "when": 1794890957280,
       "tag": "0001_clumsy_peter_parker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1794894453980,
+      "tag": "0002_warm_jackal",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1794894506754,
+      "tag": "0003_sharp_hellcat",
+      "breakpoints": true
     }
   ]
 }

@@ -21,7 +21,7 @@ export const biochemistryRegisterRouter = {
       summary: 'List biochemistry registers',
       tags: ['Registers'],
     })
-    .input(biochemistryRegisterFilterSchema)
+    .input(biochemistryRegisterFilterSchema.optional())
     .output(z.object({ registers: z.array(z.any()), total: z.number() }))
     .handler(async ({ context, input }) => {
       const db = getDb(context)
