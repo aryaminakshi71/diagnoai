@@ -21,6 +21,7 @@ import { autoPopulateRouter } from './auto-populate'
 import { reportsRouter } from './reports'
 import { whatsappRouter } from './whatsapp'
 import { aiRouter } from './ai'
+import { metricsRouter } from './metrics'
 
 export const appRouter = {
   health: healthRouter,
@@ -38,6 +39,7 @@ export const appRouter = {
   reports: reportsRouter,
   whatsapp: whatsappRouter,
   ai: aiRouter,
+  metrics: metricsRouter,
   // Add more routers here as needed:
   // org: orgRouter,
   // asset: assetRouter,
