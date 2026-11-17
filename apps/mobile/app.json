@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "DiagnoLIS",
+    "slug": "diagnolis",
+    "version": "1.0.0",
+    "scheme": "labregisters",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "diagnolis",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun run --filter=@diagnolis/api dev & bun run --filter=@diagnolis/web dev",
+    "build": "bun run --filter=@diagnolis/api build && bun run --filter=@diagnolis/web build",
+    "typecheck": "bun run --filter=@diagnolis/core typecheck && bun run --filter=@diagnolis/storage typecheck && bun run --filter=@diagnolis/api typecheck && bun run --filter=@diagnolis/web typecheck && bun run --filter=@diagnolis/mobile typecheck",
+    "lint": "bun run --filter=@diagnolis/core lint && bun run --filter=@diagnolis/storage lint && bun run --filter=@diagnolis/api lint && bun run --filter=@diagnolis/web lint",
+    "db:generate": "bun run --filter=@diagnolis/storage db:generate",
+    "db:push": "bun run --filter=@diagnolis/storage db:push",
+    "db:migrate": "bun run --filter=@diagnolis/storage db:migrate"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.2",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

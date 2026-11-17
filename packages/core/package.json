@@ -1,0 +1,32 @@
+{
+  "name": "@diagnolis/core",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./auth/config": "./src/auth/config.ts",
+    "./validators/kb": "./src/validators/kb.ts",
+    "./validators/registers": "./src/validators/registers/index.ts",
+    "./validators/ticket": "./src/validators/ticket.ts",
+    "./services/email": "./src/services/email.ts",
+    "./services/excel": "./src/services/excel.ts",
+    "./services/sla": "./src/services/sla.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@diagnolis/storage": "workspace:*",
+    "better-auth": "^1.0.0",
+    "zod": "^3.22.4",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  }
+}
