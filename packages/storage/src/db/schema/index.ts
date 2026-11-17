@@ -10,3 +10,4 @@ export * from './canned-responses.schema'
 // Register schemas
 export * from './registers'
 // export * from '../enums' // TODO: Create enums file if needed
+export * from "./branding.schema";
