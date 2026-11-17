@@ -9,7 +9,8 @@
     "build": "tsc",
     "start": "bun src/index.ts",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "db:push": "cd ../../packages/storage && bunx drizzle-kit push --force"
   },
   "dependencies": {
     "@diagnoai/core": "workspace:*",
