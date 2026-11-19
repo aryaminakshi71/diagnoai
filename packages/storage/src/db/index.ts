@@ -8,14 +8,13 @@ import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import * as schema from './schema'
 
-// Create postgres connection
-const connectionString =
-  process.env.DATABASE_URL ??
-  'postgres://postgres:postgres@localhost:5432/postgres'
+// Create postgres connection. Fail loudly rather than silently connecting to
+// a default local database, which would write to the wrong place.
+const connectionString = process.env.DATABASE_URL
 
-if (!process.env.DATABASE_URL) {
-  console.warn(
-    'DATABASE_URL is not set. Using default local connection string.',
+if (!connectionString) {
+  throw new Error(
+    'DATABASE_URL is not set. Copy .env.example to .env and set DATABASE_URL.',
   )
 }
 const client = postgres(connectionString, {

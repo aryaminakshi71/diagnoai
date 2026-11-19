@@ -8,9 +8,9 @@ import { z } from 'zod'
 export const createArticleSchema = z.object({
   title: z
     .string()
-    .min(1, 'Title is required')
     .max(255, 'Title must be less than 255 characters')
-    .transform((val) => val.trim()),
+    .transform((val) => val.trim())
+    .refine((val) => val.length > 0, 'Title is required'),
   slug: z
     .string()
     .min(1, 'Slug is required')
@@ -19,8 +19,8 @@ export const createArticleSchema = z.object({
     .transform((val) => val.trim()),
   content: z
     .string()
-    .min(1, 'Content is required')
-    .max(50000, 'Content must be less than 50000 characters'),
+    .max(50000, 'Content must be less than 50000 characters')
+    .refine((val) => val.trim().length > 0, 'Content is required'),
   excerpt: z.string().max(500, 'Excerpt must be less than 500 characters').optional(),
   category: z.string().max(100).optional(),
   tags: z.array(z.string().max(50)).max(10, 'Maximum 10 tags allowed').optional(),

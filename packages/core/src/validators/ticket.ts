@@ -32,9 +32,10 @@ const emailSchema = z
 // Common field validations
 const subjectSchema = z
   .string()
-  .min(1, 'Subject is required')
   .max(500, 'Subject must be less than 500 characters')
   .transform((val) => val.trim())
+  // Trim first, then reject whitespace-only input.
+  .refine((val) => val.length > 0, 'Subject is required')
 
 const descriptionSchema = z
   .string()
@@ -96,9 +97,9 @@ export const ticketFormSchema = z.object({
 export const addCommentSchema = z.object({
   content: z
     .string()
-    .min(1, 'Comment is required')
     .max(10000, 'Comment must be less than 10000 characters')
-    .transform((val) => val.trim()),
+    .transform((val) => val.trim())
+    .refine((val) => val.length > 0, 'Comment is required'),
   isInternal: z.boolean().optional().default(false),
 })
 
