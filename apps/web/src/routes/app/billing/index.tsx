@@ -28,6 +28,20 @@ function BillingPage() {
     onError: (e: any) => setMessage(String(e?.message ?? e)),
   })
 
+  const checkout = useMutation({
+    ...orpc.billing.createCheckout.mutationOptions(),
+    onSuccess: (data: any) => {
+      if (data?.url) {
+        window.location.href = data.url
+      } else {
+        subscribe.mutate({ plan: pendingPlan, interval })
+      }
+    },
+    onError: () => subscribe.mutate({ plan: pendingPlan, interval }),
+  })
+
+  const [pendingPlan, setPendingPlan] = useState('starter')
+
   const cancel = useMutation({
     ...orpc.billing.cancel.mutationOptions(),
     onSuccess: () => {
@@ -93,7 +107,7 @@ function BillingPage() {
               <p className="mt-3 text-sm text-gray-600">{p.limits}</p>
               <button
                 disabled={subscribe.isPending || active}
-                onClick={() => subscribe.mutate({ plan: p.id, interval })}
+                onClick={() => { setPendingPlan(p.id); checkout.mutate({ plan: p.id, interval }) }}
                 className="mt-5 w-full rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
               >
                 {active ? 'Current plan' : p.price === 0 ? 'Contact sales' : 'Subscribe'}

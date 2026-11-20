@@ -18,6 +18,64 @@ const port = Number(process.env.PORT ?? 3101)
 const server = createServer(async (req, res) => {
   try {
     const requestUrl = req.url ?? '/'
+
+    if (requestUrl.startsWith('/api/billing/webhook')) {
+      const secret = process.env.STRIPE_SECRET_KEY
+      const whSecret = process.env.STRIPE_WEBHOOK_SECRET
+      if (!secret || !whSecret) {
+        res.statusCode = 503
+        res.end('Stripe not configured')
+        return
+      }
+      const { default: Stripe } = await import('stripe')
+      const stripe = new Stripe(secret)
+      const chunks: Buffer[] = []
+      for await (const chunk of req) chunks.push(Buffer.from(chunk))
+      const raw = Buffer.concat(chunks).toString('utf8')
+      const sig = req.headers['stripe-signature'] as string
+      let event: any
+      try {
+        event = stripe.webhooks.constructEvent(raw, sig, whSecret)
+      } catch {
+        res.statusCode = 400
+        res.end('Invalid signature')
+        return
+      }
+      const { db, schema } = await import('@diagnoai/storage/db')
+      const { eq } = await import('drizzle-orm')
+      if (event.type === 'checkout.session.completed') {
+        const s = event.data.object as any
+        const orgId = s.metadata?.orgId
+        const plan = s.metadata?.plan
+        const interval = s.metadata?.interval
+        if (orgId && plan) {
+          const expires = new Date()
+          expires.setMonth(expires.getMonth() + (interval === 'year' ? 12 : 1))
+          await db
+            .update(schema.organizations)
+            .set({
+              plan,
+              subscriptionStatus: 'active',
+              subscriptionExpiresAt: expires,
+            })
+            .where(eq(schema.organizations.id, orgId))
+        }
+      }
+      if (event.type === 'customer.subscription.deleted') {
+        const sub = event.data.object as any
+        const orgId = sub.metadata?.orgId
+        if (orgId) {
+          await db
+            .update(schema.organizations)
+            .set({ subscriptionStatus: 'cancelled' })
+            .where(eq(schema.organizations.id, orgId))
+        }
+      }
+      res.statusCode = 200
+      res.end(JSON.stringify({ received: true }))
+      return
+    }
+
     if (requestUrl.startsWith('/api/auth')) {
       const allowedOrigins = new Set([
         'http://127.0.0.1:3000',

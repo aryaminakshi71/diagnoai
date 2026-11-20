@@ -6,6 +6,7 @@
 
 import { z } from "zod";
 import { eq } from "drizzle-orm";
+import Stripe from "stripe";
 import { orgAuthed, pub, getDb, schema } from "../procedures";
 
 const PLANS = [
@@ -75,6 +76,52 @@ export const billingRouter = {
         })
         .where(eq(schema.organizations.id, context.organization.id));
       return { ok: true, plan: input.plan, status: "active", expiresAt: expires };
+    }),
+
+  createCheckout: orgAuthed
+    .route({
+      method: "POST",
+      path: "/billing/checkout",
+      summary: "Create a Stripe checkout session",
+      tags: ["Billing"],
+    })
+    .input(
+      z.object({
+        plan: z.string(),
+        interval: z.enum(["month", "year"]).optional(),
+      }),
+    )
+    .output(z.any())
+    .handler(async ({ context, input }) => {
+      const secret = process.env.STRIPE_SECRET_KEY;
+      if (!secret) return { error: "Stripe not configured" };
+      const stripe = new Stripe(secret);
+      const plan = PLANS.find((p) => p.id === input.plan);
+      if (!plan || plan.price === 0) return { error: "Invalid plan" };
+      const interval = input.interval === "year" ? "year" : "month";
+      const base = process.env.VITE_PUBLIC_SITE_URL || "http://localhost:3000";
+      const session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        line_items: [
+          {
+            price_data: {
+              currency: "inr",
+              unit_amount: plan.price * 100,
+              recurring: { interval },
+              product_data: { name: `DiagnoAI ${plan.name}` },
+            },
+            quantity: 1,
+          },
+        ],
+        success_url: `${base}/app/billing?success=1`,
+        cancel_url: `${base}/app/billing?cancelled=1`,
+        metadata: {
+          orgId: context.organization.id,
+          plan: plan.id,
+          interval,
+        },
+      });
+      return { url: session.url };
     }),
 
   cancel: orgAuthed
