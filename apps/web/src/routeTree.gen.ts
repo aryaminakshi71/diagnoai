@@ -17,6 +17,7 @@ import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AppBillingIndexRouteImport } from './routes/app/billing/index'
+import { Route as AppBrandingIndexRouteImport } from './routes/app/branding/index'
 import { Route as AppLisIndexRouteImport } from './routes/app/lis/index'
 import { Route as AppRegistersIndexRouteImport } from './routes/app/registers/index'
 import { Route as AppRegistersTypeIndexRouteImport } from './routes/app/registers/$type/index'
@@ -61,6 +62,11 @@ const AppBillingIndexRoute = AppBillingIndexRouteImport.update({
   path: '/billing/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppBrandingIndexRoute = AppBrandingIndexRouteImport.update({
+  id: '/branding/',
+  path: '/branding/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppLisIndexRoute = AppLisIndexRouteImport.update({
   id: '/lis/',
   path: '/lis/',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/app/billing/': typeof AppBillingIndexRoute
+  '/app/branding/': typeof AppBrandingIndexRoute
   '/app/lis/': typeof AppLisIndexRoute
   '/app/registers/': typeof AppRegistersIndexRoute
   '/app/registers/$type/': typeof AppRegistersTypeIndexRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/app/billing': typeof AppBillingIndexRoute
+  '/app/branding': typeof AppBrandingIndexRoute
   '/app/lis': typeof AppLisIndexRoute
   '/app/registers': typeof AppRegistersIndexRoute
   '/app/registers/$type': typeof AppRegistersTypeIndexRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/app/billing/': typeof AppBillingIndexRoute
+  '/app/branding/': typeof AppBrandingIndexRoute
   '/app/lis/': typeof AppLisIndexRoute
   '/app/registers/': typeof AppRegistersIndexRoute
   '/app/registers/$type/': typeof AppRegistersTypeIndexRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/app/billing/'
+    | '/app/branding/'
     | '/app/lis/'
     | '/app/registers/'
     | '/app/registers/$type/'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/app/billing'
+    | '/app/branding'
     | '/app/lis'
     | '/app/registers'
     | '/app/registers/$type'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/app/billing/'
+    | '/app/branding/'
     | '/app/lis/'
     | '/app/registers/'
     | '/app/registers/$type/'
@@ -226,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBillingIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/branding/': {
+      id: '/app/branding/'
+      path: '/branding'
+      fullPath: '/app/branding/'
+      preLoaderRoute: typeof AppBrandingIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/lis/': {
       id: '/app/lis/'
       path: '/lis'
@@ -253,6 +272,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppBillingIndexRoute: typeof AppBillingIndexRoute
+  AppBrandingIndexRoute: typeof AppBrandingIndexRoute
   AppLisIndexRoute: typeof AppLisIndexRoute
   AppRegistersIndexRoute: typeof AppRegistersIndexRoute
   AppRegistersTypeIndexRoute: typeof AppRegistersTypeIndexRoute
@@ -261,6 +281,7 @@ interface AppRouteRouteChildren {
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppBillingIndexRoute: AppBillingIndexRoute,
+  AppBrandingIndexRoute: AppBrandingIndexRoute,
   AppLisIndexRoute: AppLisIndexRoute,
   AppRegistersIndexRoute: AppRegistersIndexRoute,
   AppRegistersTypeIndexRoute: AppRegistersTypeIndexRoute,
