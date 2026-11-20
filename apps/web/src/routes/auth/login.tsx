@@ -17,12 +17,13 @@ function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [brandName, setBrandName] = useState("DiagnoAI");
   useEffect(() => {
     fetch("/api/rpc/branding/getPublic")
       .then((r) => (r.ok ? r.json() : null))
       .then((d: any) => {
         const b = d?.json?.branding ?? d?.branding;
-        if (b?.brandName) document.title = b.brandName;
+        if (b?.brandName) { setBrandName(b.brandName); document.title = b.brandName; }
         if (b?.primaryColor) {
           document.documentElement.style.setProperty("--brand-primary", b.primaryColor);
         }
@@ -68,7 +69,7 @@ function LoginPage() {
             Sign in to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Lab Register Management System
+            {brandName}
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
