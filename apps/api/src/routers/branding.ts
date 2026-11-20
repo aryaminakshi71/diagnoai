@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { eq } from 'drizzle-orm'
 import { schema } from '@diagnoai/storage/db'
 const whiteLabelSettings = schema.whiteLabelSettings
-import { orgAuthed, getDb } from '../procedures'
+import { orgAuthed, getDb, pub } from '../procedures'
 
 
 const updateSchema = z.object({
@@ -30,6 +30,24 @@ export const brandingRouter = {
       const [row] = await db.select().from(whiteLabelSettings).where(eq(whiteLabelSettings.organizationId, orgId)).limit(1)
       return { branding: row ?? null }
     }),
+  getPublic: pub
+    .route({ method: "GET", path: "/branding/public", tags: ["Branding"] })
+    .output(z.any())
+    .handler(async ({ context }) => {
+      const db = getDb(context as any);
+      const host = ((context as any).headers?.get("host") ?? "").split(":")[0];
+      if (host) {
+        const [byDomain] = await db
+          .select()
+          .from(schema.whiteLabelSettings)
+          .where(eq(schema.whiteLabelSettings.customDomain, host))
+          .limit(1);
+        if (byDomain) return { branding: byDomain };
+      }
+      const [any] = await db.select().from(schema.whiteLabelSettings).limit(1);
+      return { branding: any ?? null };
+    }),
+
   update: orgAuthed
     .route({ method: 'PUT', path: '/branding', summary: 'Update white-label branding', tags: ['Branding'] })
     .input(updateSchema)

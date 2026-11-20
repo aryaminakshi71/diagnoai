@@ -3,7 +3,7 @@
  */
 
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { signIn, useSession } from '../../lib/auth'
 
 export const Route = createFileRoute('/auth/login')({
@@ -17,6 +17,19 @@ function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  useEffect(() => {
+    fetch("/api/rpc/branding/getPublic")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: any) => {
+        const b = d?.json?.branding ?? d?.branding;
+        if (b?.brandName) document.title = b.brandName;
+        if (b?.primaryColor) {
+          document.documentElement.style.setProperty("--brand-primary", b.primaryColor);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
 
   // Redirect if already logged in
   if (session?.user) {
