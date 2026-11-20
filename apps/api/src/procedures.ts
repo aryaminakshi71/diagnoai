@@ -10,6 +10,23 @@
 import { os } from "@orpc/server"
 import { eq } from "drizzle-orm"
 import { seedStarterCatalog } from "./lib/seed-catalog"
+
+/** Fire-and-forget: tell the central registry about a new tenant. */
+async function notifyRegistryCompany(company: Record<string, unknown>) {
+  try {
+    await fetch(
+      `${process.env.REGISTRY_URL ?? "http://127.0.0.1:4100"}/api/registry/company`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(company),
+        signal: AbortSignal.timeout(3000),
+      },
+    )
+  } catch {
+    // registry is optional
+  }
+}
 import { db, schema } from "@diagnoai/storage/db"
 import type { Database } from "@diagnoai/storage/db"
 
@@ -163,6 +180,18 @@ export const orgAuthed = authed.use<OrgAuthedContext>(async ({ context, next }) 
     } catch (err) {
       console.error("Failed to seed starter catalog", err)
     }
+    void notifyRegistryCompany({
+      app: "diagnoai",
+      orgId: org.id,
+      name: org.name,
+      slug: org.slug,
+      plan: org.plan,
+      status: "active",
+      email: context.user.email,
+      isDemo: false,
+      mrr: 0,
+      currency: "INR",
+    })
   }
 
   // 4. Dev fallback

@@ -46,6 +46,12 @@ export const organizations = pgTable(
     name: varchar('name', { length: 255 }).notNull(),
     slug: varchar('slug', { length: 255 }).notNull().unique(),
     plan: varchar('plan', { length: 50 }).default('free').notNull(),
+    subscriptionStatus: varchar('subscription_status', { length: 50 })
+      .default('active')
+      .notNull(),
+    subscriptionExpiresAt: timestamp('subscription_expires_at', {
+      withTimezone: true,
+    }),
     logo: text('logo'),
     metadata: text('metadata'),
     createdAt: timestamp('created_at', { withTimezone: true })
