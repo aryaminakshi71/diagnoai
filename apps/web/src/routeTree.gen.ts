@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
@@ -25,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -36,9 +42,9 @@ const TermsRoute = TermsRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/app/dashboard',
-  path: '/app/dashboard',
-  getParentRoute: () => rootRouteImport,
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/auth/login',
@@ -51,28 +57,29 @@ const AuthSignupRoute = AuthSignupRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppBillingIndexRoute = AppBillingIndexRouteImport.update({
-  id: '/app/billing/',
-  path: '/app/billing/',
-  getParentRoute: () => rootRouteImport,
+  id: '/billing/',
+  path: '/billing/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppLisIndexRoute = AppLisIndexRouteImport.update({
-  id: '/app/lis/',
-  path: '/app/lis/',
-  getParentRoute: () => rootRouteImport,
+  id: '/lis/',
+  path: '/lis/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppRegistersIndexRoute = AppRegistersIndexRouteImport.update({
-  id: '/app/registers/',
-  path: '/app/registers/',
-  getParentRoute: () => rootRouteImport,
+  id: '/registers/',
+  path: '/registers/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppRegistersTypeIndexRoute = AppRegistersTypeIndexRouteImport.update({
-  id: '/app/registers/$type/',
-  path: '/app/registers/$type/',
-  getParentRoute: () => rootRouteImport,
+  id: '/registers/$type/',
+  path: '/registers/$type/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/app/dashboard': typeof AppDashboardRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/app/dashboard': typeof AppDashboardRoute
@@ -98,6 +106,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/app/dashboard': typeof AppDashboardRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
     | '/privacy'
     | '/terms'
     | '/app/dashboard'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app'
     | '/privacy'
     | '/terms'
     | '/app/dashboard'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/app'
     | '/privacy'
     | '/terms'
     | '/app/dashboard'
@@ -149,15 +161,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
-  AppDashboardRoute: typeof AppDashboardRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
-  AppBillingIndexRoute: typeof AppBillingIndexRoute
-  AppLisIndexRoute: typeof AppLisIndexRoute
-  AppRegistersIndexRoute: typeof AppRegistersIndexRoute
-  AppRegistersTypeIndexRoute: typeof AppRegistersTypeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -167,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -185,10 +200,10 @@ declare module '@tanstack/react-router' {
     }
     '/app/dashboard': {
       id: '/app/dashboard'
-      path: '/app/dashboard'
+      path: '/dashboard'
       fullPath: '/app/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/auth/login': {
       id: '/auth/login'
@@ -206,46 +221,62 @@ declare module '@tanstack/react-router' {
     }
     '/app/billing/': {
       id: '/app/billing/'
-      path: '/app/billing'
+      path: '/billing'
       fullPath: '/app/billing/'
       preLoaderRoute: typeof AppBillingIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/app/lis/': {
       id: '/app/lis/'
-      path: '/app/lis'
+      path: '/lis'
       fullPath: '/app/lis/'
       preLoaderRoute: typeof AppLisIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/app/registers/': {
       id: '/app/registers/'
-      path: '/app/registers'
+      path: '/registers'
       fullPath: '/app/registers/'
       preLoaderRoute: typeof AppRegistersIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/app/registers/$type/': {
       id: '/app/registers/$type/'
-      path: '/app/registers/$type'
+      path: '/registers/$type'
       fullPath: '/app/registers/$type/'
       preLoaderRoute: typeof AppRegistersTypeIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  PrivacyRoute: PrivacyRoute,
-  TermsRoute: TermsRoute,
+interface AppRouteRouteChildren {
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppBillingIndexRoute: typeof AppBillingIndexRoute
+  AppLisIndexRoute: typeof AppLisIndexRoute
+  AppRegistersIndexRoute: typeof AppRegistersIndexRoute
+  AppRegistersTypeIndexRoute: typeof AppRegistersTypeIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
-  AuthLoginRoute: AuthLoginRoute,
-  AuthSignupRoute: AuthSignupRoute,
   AppBillingIndexRoute: AppBillingIndexRoute,
   AppLisIndexRoute: AppLisIndexRoute,
   AppRegistersIndexRoute: AppRegistersIndexRoute,
   AppRegistersTypeIndexRoute: AppRegistersTypeIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthSignupRoute: AuthSignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
