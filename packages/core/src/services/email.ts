@@ -1,3 +1,5 @@
+import { isEmailConfigured, sendEmail } from "@platform/email";
+
 /**
  * Email Notification Service
  * 
@@ -106,32 +108,37 @@ export class TicketEmailTemplates {
 }
 
 /**
- * Mock email service for development
- * Replace with actual email provider integration
+ * Resend-backed email service.
+ * Falls back to console logging when RESEND_API_KEY is not configured.
  */
-export class MockEmailService implements EmailService {
+export class ResendEmailService implements EmailService {
   async send(options: EmailOptions): Promise<void> {
-    // In development, just log the email
-    console.log("[Email Service] Would send email:", {
-      to: options.to,
-      subject: options.subject,
-    });
-    // In production, integrate with your email provider:
-    // - SendGrid: https://github.com/sendgrid/sendgrid-nodejs
-    // - Resend: https://resend.com/docs/api-reference/emails/send-email
-    // - AWS SES: https://aws.amazon.com/ses/
+    const env = {
+      RESEND_API_KEY: process.env.RESEND_API_KEY,
+      EMAIL_FROM: process.env.EMAIL_FROM,
+    };
+    if (!isEmailConfigured(env)) {
+      console.log("[Email Service] RESEND_API_KEY not set — logging instead:", {
+        to: options.to,
+        subject: options.subject,
+      });
+      return;
+    }
+    const recipients = Array.isArray(options.to) ? options.to : [options.to];
+    for (const to of recipients) {
+      await sendEmail(env, {
+        to,
+        subject: options.subject,
+        html: options.html,
+        text: options.text,
+      });
+    }
   }
 }
 
 /**
- * Get email service instance
- * Configure based on environment
+ * Get email service instance.
  */
 export function getEmailService(): EmailService {
-  // In production, return actual email service
-  // return new SendGridEmailService(process.env.SENDGRID_API_KEY);
-  // return new ResendEmailService(process.env.RESEND_API_KEY);
-  
-  // For now, return mock service
-  return new MockEmailService();
+  return new ResendEmailService();
 }
