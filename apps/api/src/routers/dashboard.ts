@@ -36,84 +36,33 @@ export const dashboardRouter = {
       const db = getDb(context)
       const orgId = context.organization.id
 
-      // Open tickets count
-      const [openTicketsResult] = await db
-        .select({ count: count() })
-        .from(schema.tickets)
-        .where(
-          and(
-            eq(schema.tickets.organizationId, orgId),
-            eq(schema.tickets.status, 'open'),
-          ),
-        )
-
-      const openTickets = openTicketsResult?.count || 0
-
-      // Resolved today
       const today = new Date()
       today.setHours(0, 0, 0, 0)
 
-      const [resolvedTodayResult] = await db
-        .select({ count: count() })
-        .from(schema.tickets)
-        .where(
-          and(
-            eq(schema.tickets.organizationId, orgId),
-            eq(schema.tickets.status, 'resolved'),
-            gte(schema.tickets.resolvedAt, today),
-          ),
-        )
-
-      const resolvedToday = resolvedTodayResult?.count || 0
-
-      // Total tickets for resolution rate
-      const [totalTicketsResult] = await db
-        .select({ count: count() })
+      // Single round trip: conditional aggregation instead of 5 sequential counts.
+      const [row] = await db
+        .select({
+          openTickets: sql<number>`COUNT(*) FILTER (WHERE ${schema.tickets.status} = 'open')`,
+          resolvedToday: sql<number>`COUNT(*) FILTER (WHERE ${schema.tickets.status} = 'resolved' AND ${schema.tickets.resolvedAt} >= ${today})`,
+          totalTickets: sql<number>`COUNT(*)`,
+          resolvedTickets: sql<number>`COUNT(*) FILTER (WHERE ${schema.tickets.status} = 'resolved')`,
+          activeAgents: sql<number>`COUNT(DISTINCT ${schema.tickets.assignedTo}) FILTER (WHERE ${schema.tickets.assignedTo} IS NOT NULL AND ${schema.tickets.status} IN ('open', 'in_progress'))`,
+        })
         .from(schema.tickets)
         .where(eq(schema.tickets.organizationId, orgId))
 
-      const totalTickets = totalTicketsResult?.count || 0
-      const [resolvedTicketsResult] = await db
-        .select({ count: count() })
-        .from(schema.tickets)
-        .where(
-          and(
-            eq(schema.tickets.organizationId, orgId),
-            eq(schema.tickets.status, 'resolved'),
-          ),
-        )
-
-      const resolvedTickets = resolvedTicketsResult?.count || 0
+      const openTickets = Number(row?.openTickets ?? 0)
+      const resolvedToday = Number(row?.resolvedToday ?? 0)
+      const totalTickets = Number(row?.totalTickets ?? 0)
+      const resolvedTickets = Number(row?.resolvedTickets ?? 0)
+      const activeAgents = Number(row?.activeAgents ?? 0)
       const resolutionRate =
         totalTickets > 0 ? (resolvedTickets / totalTickets) * 100 : 0
 
-      // Active agents (users with assigned tickets)
-      const [activeAgentsResult] = await db
-        .select({
-          count: sql<number>`COUNT(DISTINCT ${schema.tickets.assignedTo})`,
-        })
-        .from(schema.tickets)
-        .where(
-          and(
-            eq(schema.tickets.organizationId, orgId),
-            sql`${schema.tickets.assignedTo} IS NOT NULL`,
-            sql`${schema.tickets.status} IN ('open', 'in_progress')`,
-          ),
-        )
-
-      const activeAgents = Number(activeAgentsResult?.count) || 0
-
-      // Calculate average response time (simplified - time to first comment)
-      // In a real implementation, you'd track first response time more accurately
-      const avgResponseTime = 2.5 // Placeholder - would calculate from ticketComments
-
-      // First response time (placeholder)
+      // Placeholders until CSAT / SLA tables are wired.
+      const avgResponseTime = 2.5
       const firstResponseTime = 1.2
-
-      // Satisfaction score (placeholder - would come from CSAT data)
       const satisfactionScore = 4.7
-
-      // SLA compliance (placeholder - would calculate from slaStatus table)
       const slaCompliance = 94.2
 
       return {
