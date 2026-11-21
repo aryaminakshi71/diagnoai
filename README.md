@@ -1,6 +1,24 @@
-# Lab Register Management System
+# DiagnoAI — Laboratory Information System
 
-A comprehensive lab register management system for veterinary disease diagnostic labs, built with modern web technologies.
+[![CI](https://github.com/aryaminakshi71/diagnoai/actions/workflows/ci.yml/badge.svg)](https://github.com/aryaminakshi71/diagnoai/actions/workflows/ci.yml)
+
+A modern LIS for **human and veterinary** labs: patients, orders, samples, results, reports, invoices, inventory, and QC — with AI interpretation and PHI guardrails.
+
+## AI features
+
+- AI result interpretation (doctor-facing summary + abnormal explanations)
+- AI abnormal-result explainer
+- Patient-friendly report summaries
+- PHI redaction before every model call
+- One codebase for human and veterinary labs (`VITE_LAB_TYPE=human|veterinary|both`)
+
+## Quick start
+
+```bash
+bun install
+cp .env.example .env   # fill DATABASE_URL, BETTER_AUTH_SECRET, OPENAI_API_KEY
+bun run dev            # web on :3000, API on :3101
+```
 
 ## Tech Stack
 
