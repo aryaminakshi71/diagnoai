@@ -11,6 +11,7 @@ import { and, eq, desc, count, ilike, sql } from 'drizzle-orm'
 import { ORPCError } from '@orpc/server'
 import { orgAuthed, getDb, schema } from '../procedures'
 import { getOrCache } from '../lib/cache'
+import { trackQuery } from '../lib/db-performance'
 
 const listInput = z
   .object({
@@ -55,17 +56,23 @@ export const patientsRouter = {
           sql`(${schema.patients.firstName} ILIKE ${'%' + input.search + '%'} OR ${schema.patients.lastName} ILIKE ${'%' + input.search + '%'} OR ${schema.patients.mrn} ILIKE ${'%' + input.search + '%'} OR ${schema.patients.phone} ILIKE ${'%' + input.search + '%'})`,
         )
       }
-      const rows = await db
-        .select()
-        .from(schema.patients)
-        .where(and(...conditions))
-        .orderBy(desc(schema.patients.createdAt))
-        .limit(input.limit)
-        .offset(input.offset)
-      const [total] = await db
-        .select({ count: count() })
-        .from(schema.patients)
-        .where(and(...conditions))
+      const [rows, [total]] = await Promise.all([
+        trackQuery('lis.patients.list', () =>
+          db
+            .select()
+            .from(schema.patients)
+            .where(and(...conditions))
+            .orderBy(desc(schema.patients.createdAt))
+            .limit(input.limit)
+            .offset(input.offset),
+        ),
+        trackQuery('lis.patients.count', () =>
+          db
+            .select({ count: count() })
+            .from(schema.patients)
+            .where(and(...conditions)),
+        ),
+      ])
       return { patients: rows, total: total?.count ?? 0 }
     }),
 
