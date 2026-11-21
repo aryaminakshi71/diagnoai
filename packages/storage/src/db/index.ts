@@ -37,3 +37,18 @@ export { schema }
 
 // Export types
 export type Database = typeof db
+
+// Optional read replica. Set DATABASE_READ_URL to route analytics/dashboard
+// reads away from the primary. Falls back to the primary when unset.
+const readConnectionString = process.env.DATABASE_READ_URL
+const readClient = readConnectionString
+  ? postgres(readConnectionString, {
+      max: readConnectionString.includes("-pooler.") ? 5 : 10,
+      idle_timeout: 20,
+      connect_timeout: 10,
+      prepare: !readConnectionString.includes("-pooler."),
+    })
+  : null
+
+export const readDb = readClient ? drizzle(readClient, { schema }) : db
+

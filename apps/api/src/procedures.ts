@@ -27,7 +27,7 @@ async function notifyRegistryCompany(company: Record<string, unknown>) {
     // registry is optional
   }
 }
-import { db, schema } from "@diagnoai/storage/db"
+import { db, readDb, schema } from "@diagnoai/storage/db"
 import type { Database } from "@diagnoai/storage/db"
 
 export interface Logger {
@@ -69,6 +69,11 @@ export interface OrgAuthedContext extends AuthedContext {
 // Helper to get database instance from context
 export function getDb(_context: AuthedContext | OrgAuthedContext): Database {
   return db
+}
+
+/** Read-only client (DATABASE_READ_URL when set, else the primary). */
+export function getReadDb(_context: AuthedContext | OrgAuthedContext): Database {
+  return readDb as Database
 }
 
 // Export schema for use in routers

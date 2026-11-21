@@ -6,7 +6,8 @@
 
 import { z } from 'zod'
 import { eq, and, gte, sql, count, desc } from 'drizzle-orm'
-import { orgAuthed, getDb, schema } from '../procedures'
+import { orgAuthed, getDb, getReadDb, schema } from '../procedures'
+import { getOrCache } from '../lib/cache'
 
 export const dashboardRouter = {
   /**
@@ -33,12 +34,14 @@ export const dashboardRouter = {
       }),
     )
     .handler(async ({ context }) => {
-      const db = getDb(context)
+      const db = getReadDb(context)
       const orgId = context.organization.id
 
       const today = new Date()
       today.setHours(0, 0, 0, 0)
 
+      // Cache for 2 minutes — dashboard metrics tolerate slight staleness.
+      return getOrCache(`dashboard:metrics:${orgId}`, async () => {
       // Single round trip: conditional aggregation instead of 5 sequential counts.
       const [row] = await db
         .select({
@@ -75,6 +78,7 @@ export const dashboardRouter = {
         firstResponseTime,
         resolutionRate: Math.round(resolutionRate * 10) / 10,
       }
+      }, 120)
     }),
 
   /**
@@ -105,7 +109,7 @@ export const dashboardRouter = {
       }),
     )
     .handler(async ({ context, input }) => {
-      const db = getDb(context)
+      const db = getReadDb(context)
       const orgId = context.organization.id
       const days = input?.days || 7
 
@@ -163,7 +167,7 @@ export const dashboardRouter = {
       }),
     )
     .handler(async ({ context, input }) => {
-      const db = getDb(context)
+      const db = getReadDb(context)
       const orgId = context.organization.id
       const limit = input?.limit || 5
 
@@ -216,7 +220,7 @@ export const dashboardRouter = {
       }),
     )
     .handler(async ({ context }) => {
-      const db = getDb(context)
+      const db = getReadDb(context)
       const orgId = context.organization.id
 
       // Count all register types

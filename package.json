@@ -16,7 +16,8 @@
     "db:push": "bun run --filter=@diagnoai/storage db:push",
     "db:migrate": "bun run --filter=@diagnoai/storage db:migrate",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "db:optimize": "bash scripts/db-indexes.sh --apply && bash scripts/db-trigram.sh --apply && bash scripts/db-triggers.sh --apply"
   },
   "devDependencies": {
     "@types/node": "^25.2.2",

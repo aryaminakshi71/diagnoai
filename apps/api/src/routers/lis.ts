@@ -10,6 +10,7 @@ import { z } from 'zod'
 import { and, eq, desc, count, ilike, sql } from 'drizzle-orm'
 import { ORPCError } from '@orpc/server'
 import { orgAuthed, getDb, schema } from '../procedures'
+import { getOrCache } from '../lib/cache'
 
 const listInput = z
   .object({
@@ -273,14 +274,18 @@ export const testsRouter = {
           sql`(${schema.testCatalog.name} ILIKE ${'%' + input.search + '%'} OR ${schema.testCatalog.code} ILIKE ${'%' + input.search + '%'})`,
         )
       }
-      const rows = await db
-        .select()
-        .from(schema.testCatalog)
-        .where(and(...conditions))
-        .orderBy(schema.testCatalog.name)
-        .limit(input.limit)
-        .offset(input.offset)
-      return { tests: rows }
+      // Test catalog changes rarely; cache per org + query for 5 minutes.
+      const cacheKey = `lis:tests:${context.organization.id}:${JSON.stringify(input)}`
+      return getOrCache(cacheKey, async () => {
+        const rows = await db
+          .select()
+          .from(schema.testCatalog)
+          .where(and(...conditions))
+          .orderBy(schema.testCatalog.name)
+          .limit(input.limit)
+          .offset(input.offset)
+        return { tests: rows }
+      }, 300)
     }),
 
   get: orgAuthed
