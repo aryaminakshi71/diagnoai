@@ -31,6 +31,6 @@
   "dependencies": {
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "@platform/email": "file:../../platform/packages/email"
+    "@platform/email": "workspace:*"
   }
 }
